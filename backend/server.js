@@ -3,10 +3,29 @@ import puppeteer from "puppeteer";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
+import NodeCache from "node-cache";
 
 const app = express();
 app.use(cors());
 const PORT = 3000;
+
+// Cache setup (5 minutes TTL)
+const cache = new NodeCache({ stdTTL: 300 });
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: "Too many requests from this IP, please try again later."
+  }
+});
+
+// Apply rate limiting to API routes
+app.use("/products", limiter);
+app.use("/nikora", limiter);
+app.use("/libre", limiter);
 
 const BASE_URL = "https://nikorasupermarket.ge";
 const LIBRE_URL = "https://libre.ge/productebi/boom-price";
@@ -149,7 +168,16 @@ async function scrapeLibreProducts() {
 // API routes
 app.get("/products", async (req, res) => {
   try {
+    const cacheKey = "products";
+    const cached = cache.get(cacheKey);
+
+    if (cached) {
+      console.log("📋 Returning cached products");
+      return res.json(cached);
+    }
+
     const products = await scrapeProducts();
+    cache.set(cacheKey, products);
     res.json(products);
   } catch (err) {
     console.error("Error:", err.message);
@@ -158,20 +186,62 @@ app.get("/products", async (req, res) => {
 });
 
 app.get("/nikora", async (req, res) => {
+  const cacheKey = "nikora";
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    console.log("📋 Returning cached nikora products");
+    return res.json(cached);
+  }
+
   const products = await scrapeNikora();
+  cache.set(cacheKey, products);
   res.json(products);
 });
 
 app.get("/libre", async (req, res) => {
+  const cacheKey = "libre";
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    console.log("📋 Returning cached libre products");
+    return res.json(cached);
+  }
+
   const products = await scrapeLibre();
+  cache.set(cacheKey, products);
   res.json(products);
 });
 
 app.get("/libre-products", async (req, res) => {
+  const cacheKey = "libre_products";
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    console.log("📋 Returning cached libre products");
+    return res.json(cached);
+  }
+
   const products = await scrapeLibreProducts();
+  cache.set(cacheKey, products);
   res.json(products);
+});
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    cache: {
+      keys: cache.keys(),
+      stats: cache.getStats()
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
+  console.log(`🔒 Rate limiting: 100 requests per 15 minutes`);
+  console.log(`💾 Caching: 5 minutes TTL`);
 });
