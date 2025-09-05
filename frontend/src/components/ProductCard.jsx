@@ -5,6 +5,7 @@ import {
   calculateDiscountPercentage,
   formatPrice,
 } from "../utils/helpers";
+import { showProductToast, showErrorToast } from "../utils/toast";
 
 const ProductCard = ({ product, store }) => {
   const storeInfo = STORES.find((s) => s.id === store);
@@ -33,7 +34,15 @@ const ProductCard = ({ product, store }) => {
   const handleProductClick = () => {
     if (link) {
       window.open(link, "_blank", "noopener,noreferrer");
+      showProductToast('view', title || 'პროდუქტი');
+    } else {
+      showErrorToast('ლინკი მიუწვდომელია');
     }
+  };
+
+  const handleAddToCart = () => {
+    // Here you would typically add the product to cart state/context
+    showProductToast('addToCart', title || 'პროდუქტი');
   };
 
   return (
@@ -103,7 +112,10 @@ const ProductCard = ({ product, store }) => {
           >
             დეტალურად
           </button>
-          <button className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-200 transition-all duration-200 transform hover:scale-[1.02]">
+          <button 
+            onClick={handleAddToCart}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-200 transition-all duration-200 transform hover:scale-[1.02]"
+          >
             კალათაში
           </button>
         </div>

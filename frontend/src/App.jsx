@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 // Components
@@ -11,6 +11,9 @@ import {
 
 // Hooks
 import { useProducts, useProductFilters } from './hooks';
+
+// Toast utilities
+import { showErrorToast, showSuccessToast, toastMessages } from './utils/toast';
 
 /**
  * Main Application Component
@@ -30,6 +33,29 @@ const App = () => {
     hasActiveFilters
   } = useProductFilters(products);
 
+  // Handle errors with toast notifications
+  useEffect(() => {
+    if (error) {
+      showErrorToast(toastMessages.error.loadingFailed);
+    }
+  }, [error]);
+
+  // Enhanced handlers with toast notifications
+  const handleClearFilters = () => {
+    clearFilters();
+    showSuccessToast(toastMessages.success.filtersCleared);
+  };
+
+  const handleRefresh = async () => {
+    try {
+      await refresh();
+      showSuccessToast(toastMessages.success.dataRefreshed);
+    } catch (err) {
+      console.error('Refresh failed:', err);
+      showErrorToast(toastMessages.error.networkError);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 text-gray-800">
       <Header 
@@ -43,8 +69,8 @@ const App = () => {
           totalProducts={filteredProducts.length}
           selectedStore={selectedStore}
           hasActiveFilters={hasActiveFilters}
-          onClearFilters={clearFilters}
-          onRefresh={refresh}
+          onClearFilters={handleClearFilters}
+          onRefresh={handleRefresh}
         />
 
         <ProductGrid 

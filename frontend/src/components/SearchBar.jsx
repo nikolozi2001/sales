@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { showInfoToast } from '../utils/toast';
 
 const SearchBar = ({ onSearch, placeholder = "ძებნა პროდუქტებში..." }) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchValue(value);
+    onSearch(value);
+  };
+
+  // Show search info after typing
+  useEffect(() => {
+    if (searchValue.trim() && searchValue.length > 2) {
+      const timeoutId = setTimeout(() => {
+        showInfoToast(`მოძებნა: "${searchValue}"`);
+      }, 1500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchValue]);
+
   return (
     <label className="relative block">
       <span className="sr-only">Search products</span>
       <input
-        onChange={(e) => onSearch(e.target.value)}
-        className="placeholder:italic placeholder:text-gray-400 block bg-gray-50 w-full border border-gray-200 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+        value={searchValue}
+        onChange={(e) => handleSearch(e.target.value)}
+        className="placeholder:italic placeholder:text-gray-400 block bg-gray-50 w-full border border-gray-200 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all duration-200"
         placeholder={placeholder}
         type="text"
         name="search"

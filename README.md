@@ -1,13 +1,16 @@
 # Sales Project
 
-A Node.js web scraping application that extracts product information from e-commerce websites.
+A Georgian grocery store discount aggregator with modern UI and toast notifications.
 
 ## Features
 
-- Product scraping using Puppeteer
-- Express.js REST API
+- Product scraping from multiple Georgian stores (2nabiji, Nikora)
+- React frontend with modern design
+- **Toast Notifications System** with Georgian language support
 - Real-time price monitoring
-- Product data extraction (title, image, price, discounts)
+- Product filtering and search
+- Responsive design with Tailwind CSS
+- Enhanced user experience with micro-interactions
 
 ## Installation
 
