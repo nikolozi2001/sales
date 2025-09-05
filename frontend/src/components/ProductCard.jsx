@@ -27,7 +27,7 @@ const ProductCard = ({ product, store }) => {
     title = product.name;
     image = product.img;
     oldPrice = extractPrice(product.oldPrice);
-    newPrice = extractPrice(product.price);
+    newPrice = extractPrice(product.newPrice);
     link = product.link;
   } else if (store === "libre-products") {
     title = product.name;
