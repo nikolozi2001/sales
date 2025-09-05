@@ -3,7 +3,14 @@ import ProductCard from "./ProductCard";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorMessage from "./ErrorMessage";
 
-const ProductGrid = ({ products, loading, error }) => {
+const ProductGrid = ({
+  products,
+  loading,
+  error,
+  currentPage,
+  setCurrentPage,
+  totalPages,
+}) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -55,14 +62,39 @@ const ProductGrid = ({ products, loading, error }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map((item, index) => (
-        <ProductCard
-          key={`${item.store}-${index}`}
-          product={item.product}
-          store={item.store}
-        />
-      ))}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {products.map((item, index) => (
+          <ProductCard
+            key={`${item.store}-${item.product.id || index}`}
+            product={item.product}
+            store={item.store}
+          />
+        ))}
+      </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-2 mt-6">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            წინა
+          </button>
+          <span className="text-sm font-medium text-gray-700">
+            გვერდი {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            შემდეგი
+          </button>
+        </div>
+      )}
     </div>
   );
 };

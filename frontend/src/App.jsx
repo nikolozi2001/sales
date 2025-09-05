@@ -12,7 +12,7 @@ import {
 } from './components';
 
 // Hooks
-import { useProducts, useProductFilters } from './hooks';
+import { useProducts } from './hooks';
 
 // Toast utilities
 import { showErrorToast, showSuccessToast, toastMessages } from './utils/toast';
@@ -22,19 +22,18 @@ import { showErrorToast, showSuccessToast, toastMessages } from './utils/toast';
  * Displays discounted products from Georgian grocery stores
  */
 const App = () => {
-  // Fetch products data
-  const { products, loading, error, refresh } = useProducts();
-  
-  // Handle filtering
+  // Fetch products data and handle filtering/pagination
   const {
-    filteredProducts,
+    products, // paginated and filtered products
+    loading,
+    error,
+    refresh,
     searchQuery,
     setSearchQuery,
     selectedStore,
     setSelectedStore,
     clearFilters,
     hasActiveFilters,
-    // Advanced filters
     priceRange,
     setPriceRange,
     discountRange,
@@ -43,8 +42,12 @@ const App = () => {
     setSortBy,
     showOnlyDiscounted,
     setShowOnlyDiscounted,
-    priceStats
-  } = useProductFilters(products || []);
+    priceStats,
+    currentPage,
+    setCurrentPage,
+    productsPerPage,
+    totalPages,
+  } = useProducts();
 
   // Handle errors with toast notifications
   useEffect(() => {
@@ -79,7 +82,7 @@ const App = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <StatsBar
-          totalProducts={filteredProducts.length}
+          totalProducts={products.length}
           selectedStore={selectedStore}
           hasActiveFilters={hasActiveFilters}
           onClearFilters={handleClearFilters}
@@ -114,13 +117,17 @@ const App = () => {
           clearFilters={handleClearFilters}
           hasActiveFilters={hasActiveFilters}
           priceStats={priceStats}
-          totalProducts={filteredProducts.length}
+          totalProducts={products.length}
         />
 
         <ProductGrid 
-          products={filteredProducts} 
+          products={products} 
           loading={loading} 
-          error={error} 
+          error={error}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          productsPerPage={productsPerPage}
+          totalPages={totalPages}
         />
 
         <Footer />
