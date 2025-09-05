@@ -53,11 +53,11 @@ export const useProductFilters = (products) => {
     });
 
     // Apply price range filter
-    filtered = filtered.filter((product) => {
-      const price = product.price
-        ? extractPrice(product.price)
-        : product.newPrice
-        ? extractPrice(product.newPrice)
+    filtered = filtered.filter((item) => {
+      const price = item.product.price
+        ? extractPrice(item.product.price)
+        : item.product.newPrice
+        ? extractPrice(item.product.newPrice)
         : 0;
       return price >= priceRange.min && price <= priceRange.max;
     });
