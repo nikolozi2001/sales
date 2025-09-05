@@ -14,6 +14,12 @@ export const STORES = [
     endpoint: "/nikora",
   },
   { id: "libre", name: "ლიბრე", color: "bg-purple-600", endpoint: "/libre" },
+  {
+    id: "libre-products",
+    name: "ლიბრე (პროდუქტები)",
+    color: "bg-purple-100",
+    endpoint: "/libre-products",
+  },
 ];
 
 export const LOADING_STATES = {
