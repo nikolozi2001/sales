@@ -8,3 +8,5 @@ export { default as ErrorMessage } from './ErrorMessage';
 export { default as SearchBar } from './SearchBar';
 export { default as StoreSwitcher } from './StoreSwitcher';
 export { default as StatsBar } from './StatsBar';
+export { default as FilterPanel } from './FilterPanel';
+export { default as QuickFilters } from './QuickFilters';

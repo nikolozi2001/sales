@@ -6,7 +6,9 @@ import {
   Header, 
   Footer, 
   ProductGrid, 
-  StatsBar 
+  StatsBar,
+  FilterPanel,
+  QuickFilters
 } from './components';
 
 // Hooks
@@ -30,7 +32,19 @@ const App = () => {
     selectedStore,
     setSelectedStore,
     clearFilters,
-    hasActiveFilters
+    hasActiveFilters,
+    // Advanced filters
+    priceRange,
+    setPriceRange,
+    discountRange,
+    setDiscountRange,
+    sortBy,
+    setSortBy,
+    showOnlyDiscounted,
+    setShowOnlyDiscounted,
+    category,
+    setCategory,
+    priceStats
   } = useProductFilters(products);
 
   // Handle errors with toast notifications
@@ -71,6 +85,36 @@ const App = () => {
           hasActiveFilters={hasActiveFilters}
           onClearFilters={handleClearFilters}
           onRefresh={handleRefresh}
+          sortBy={sortBy}
+          category={category}
+          showOnlyDiscounted={showOnlyDiscounted}
+        />
+
+        <QuickFilters
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          showOnlyDiscounted={showOnlyDiscounted}
+          setShowOnlyDiscounted={setShowOnlyDiscounted}
+          setDiscountRange={setDiscountRange}
+          clearFilters={handleClearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
+
+        <FilterPanel
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          discountRange={discountRange}
+          setDiscountRange={setDiscountRange}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          showOnlyDiscounted={showOnlyDiscounted}
+          setShowOnlyDiscounted={setShowOnlyDiscounted}
+          category={category}
+          setCategory={setCategory}
+          clearFilters={handleClearFilters}
+          hasActiveFilters={hasActiveFilters}
+          priceStats={priceStats}
+          totalProducts={filteredProducts.length}
         />
 
         <ProductGrid 
