@@ -15,6 +15,7 @@ export const useProducts = () => {
   const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFiltering, setIsFiltering] = useState(false);
 
   // Integrate product filtering
   const {
@@ -55,10 +56,21 @@ export const useProducts = () => {
     fetchProducts();
   }, []);
 
-  // Reset to first page whenever filters change
+  // Reset to first page and trigger filtering indicator whenever filters change
   useEffect(() => {
     setCurrentPage(1);
+    setIsFiltering(true);
   }, [searchQuery, selectedStore, priceRange, discountRange, sortBy, showOnlyDiscounted]);
+
+  // Deactivate filtering indicator after a short delay to account for rendering
+  useEffect(() => {
+    if (isFiltering) {
+      const handler = setTimeout(() => {
+        setIsFiltering(false);
+      }, 100); // Adjust delay as needed
+      return () => clearTimeout(handler);
+    }
+  }, [isFiltering, filteredProducts]); // Depend on filteredProducts to ensure it's re-calculated
 
   const refresh = () => {
     fetchProducts();
@@ -98,6 +110,7 @@ export const useProducts = () => {
     showOnlyDiscounted,
     setShowOnlyDiscounted,
     priceStats,
+    isFiltering,
     // Pagination-related exports
     currentPage,
     setCurrentPage,

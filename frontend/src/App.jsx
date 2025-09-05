@@ -47,6 +47,7 @@ const App = () => {
     setCurrentPage,
     productsPerPage,
     totalPages,
+    isFiltering,
   } = useProducts();
 
   // Handle errors with toast notifications
@@ -81,27 +82,31 @@ const App = () => {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <StatsBar
-          totalProducts={products.length}
-          selectedStore={selectedStore}
-          hasActiveFilters={hasActiveFilters}
-          onClearFilters={handleClearFilters}
-          onRefresh={handleRefresh}
-          sortBy={sortBy}
-          showOnlyDiscounted={showOnlyDiscounted}
-        />
+        <div className="mb-6">
+          <StatsBar
+            totalProducts={products.length}
+            selectedStore={selectedStore}
+            hasActiveFilters={hasActiveFilters}
+            onClearFilters={handleClearFilters}
+            onRefresh={handleRefresh}
+            sortBy={sortBy}
+            showOnlyDiscounted={showOnlyDiscounted}
+          />
+        </div>
 
-        <QuickFilters
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          showOnlyDiscounted={showOnlyDiscounted}
-          setShowOnlyDiscounted={setShowOnlyDiscounted}
-          setDiscountRange={setDiscountRange}
-          selectedStore={selectedStore}
-          setSelectedStore={setSelectedStore}
-          clearFilters={handleClearFilters}
-          hasActiveFilters={hasActiveFilters}
-        />
+        <div className="mb-6 lg:hidden"> {/* Added lg:hidden because QuickFilters is hidden on larger screens */}
+          <QuickFilters
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            showOnlyDiscounted={showOnlyDiscounted}
+            setShowOnlyDiscounted={setShowOnlyDiscounted}
+            setDiscountRange={setDiscountRange}
+            selectedStore={selectedStore}
+            setSelectedStore={setSelectedStore}
+            clearFilters={handleClearFilters}
+            hasActiveFilters={hasActiveFilters}
+          />
+        </div>
 
         <FilterPanel
           priceRange={priceRange}
@@ -128,6 +133,7 @@ const App = () => {
           setCurrentPage={setCurrentPage}
           productsPerPage={productsPerPage}
           totalPages={totalPages}
+          isFiltering={isFiltering}
         />
 
         <Footer />

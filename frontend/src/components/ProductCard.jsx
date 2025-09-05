@@ -52,7 +52,7 @@ const ProductCard = ({ product, store }) => {
           <img
             src={image}
             alt={title}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            className="block w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             onError={handleImageError}
           />
         ) : (
@@ -83,13 +83,13 @@ const ProductCard = ({ product, store }) => {
       </div>
 
       <div className="p-5">
-        <h3 className="text-sm font-semibold line-clamp-2 min-h-[2.5rem] mb-4 text-gray-800 group-hover:text-gray-900 transition-colors">
+        <h4 className="font-medium line-clamp-2 min-h-[2.5rem] mb-4 text-gray-800 group-hover:text-gray-900 transition-colors leading-tight">
           {title || "Product"}
-        </h3>
+        </h4>
 
         <div className="flex items-baseline gap-3 mb-5">
           {newPrice > 0 && (
-            <div className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <div className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               {formatPrice(newPrice)}
             </div>
           )}
@@ -104,7 +104,7 @@ const ProductCard = ({ product, store }) => {
           <button
             onClick={handleProductClick}
             disabled={!link}
-            className={`flex-1 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
+            className={`flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200 ${
               link
                 ? "border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm cursor-pointer"
                 : "border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50/50"
@@ -114,7 +114,7 @@ const ProductCard = ({ product, store }) => {
           </button>
           <button 
             onClick={handleAddToCart}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-200 transition-all duration-200 transform hover:scale-[1.02]"
+            className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-200 transition-all duration-200 transform hover:scale-[1.02]"
           >
             კალათაში
           </button>

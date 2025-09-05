@@ -38,7 +38,7 @@ const QuickFilters = ({
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 lg:hidden">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-medium text-gray-800">სწრაფი ფილტრები</h3>
+        <h3 className="text-gray-800">სწრაფი ფილტრები</h3>
         {hasActiveFilters && (
           <button
             onClick={clearFilters}

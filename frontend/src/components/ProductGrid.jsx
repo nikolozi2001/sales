@@ -10,6 +10,7 @@ const ProductGrid = ({
   currentPage,
   setCurrentPage,
   totalPages,
+  isFiltering,
 }) => {
   if (loading) {
     return (
@@ -62,7 +63,12 @@ const ProductGrid = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {isFiltering && (
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl">
+          <LoadingSpinner />
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map((item, index) => (
           <ProductCard

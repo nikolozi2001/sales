@@ -62,7 +62,7 @@ const FilterPanel = ({
             <span className="text-white text-lg">🔍</span>
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800">ფილტრები</h3>
+            <h3 className="text-gray-800">ფილტრები</h3>
             <p className="text-sm text-gray-500">
               {totalProducts} პროდუქტი
               {hasActiveFilters && " • ფილტრები აქტიურია"}
