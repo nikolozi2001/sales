@@ -91,7 +91,12 @@ const ProductCard = ({ product, store }) => {
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={handleProductClick}
-            className="flex-1 px-3 py-1.5 rounded-md border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            disabled={!link}
+            className={`flex-1 px-3 py-1.5 rounded-md border text-sm transition-colors ${
+              link
+                ? "border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer"
+                : "border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50"
+            }`}
           >
             დეტალურად
           </button>
