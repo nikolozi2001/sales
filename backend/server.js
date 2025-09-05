@@ -2,8 +2,10 @@ import express from "express";
 import puppeteer from "puppeteer";
 import axios from "axios";
 import * as cheerio from "cheerio";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 const PORT = 3000;
 
 const BASE_URL = "https://nikorasupermarket.ge";
