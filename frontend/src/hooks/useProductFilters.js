@@ -63,12 +63,12 @@ export const useProductFilters = (products) => {
     });
 
     // Apply discount filter
-    filtered = filtered.filter((product) => {
-      const oldPrice = product.oldPrice ? extractPrice(product.oldPrice) : 0;
-      const newPrice = product.price
-        ? extractPrice(product.price)
-        : product.newPrice
-        ? extractPrice(product.newPrice)
+    filtered = filtered.filter((item) => {
+      const oldPrice = item.product.oldPrice ? extractPrice(item.product.oldPrice) : 0;
+      const newPrice = item.product.price
+        ? extractPrice(item.product.price)
+        : item.product.newPrice
+        ? extractPrice(item.product.newPrice)
         : 0;
 
       const discount = calculateDiscountPercentage(oldPrice, newPrice);
