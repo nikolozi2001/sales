@@ -2,16 +2,16 @@ import React from 'react';
 import { SORT_OPTIONS, DISCOUNT_RANGES, STORES } from '../constants';
 import { showInfoToast } from '../utils/toast';
 
-const QuickFilters = ({ 
-  sortBy, 
-  setSortBy, 
-  showOnlyDiscounted, 
+const QuickFilters = ({
+  sortBy,
+  setSortBy,
+  showOnlyDiscounted,
   setShowOnlyDiscounted,
   setDiscountRange,
   selectedStore,
   setSelectedStore,
   clearFilters,
-  hasActiveFilters 
+  hasActiveFilters
 }) => {
   const handleQuickSort = (value) => {
     setSortBy(value);

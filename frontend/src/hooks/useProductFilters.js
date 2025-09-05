@@ -20,6 +20,7 @@ export const useProductFilters = (products) => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [discountRange, setDiscountRange] = useState({ min: 0, max: 100 });
   const [sortBy, setSortBy] = useState("default"); // default, price-asc, price-desc, discount-desc, name-asc
+  const [showOnlyDiscounted, setShowOnlyDiscounted] = useState(false);
 
   // Get price and discount statistics
   const priceStats = useMemo(() => {
@@ -74,6 +75,12 @@ export const useProductFilters = (products) => {
         : 0;
 
       const discount = calculateDiscountPercentage(oldPrice, newPrice);
+      
+      // Apply "show only discounted" filter
+      if (showOnlyDiscounted && discount === 0) {
+        return false;
+      }
+
       return discount >= discountRange.min && discount <= discountRange.max;
     });
 
@@ -131,6 +138,7 @@ export const useProductFilters = (products) => {
     priceRange,
     discountRange,
     sortBy,
+    showOnlyDiscounted,
   ]);
 
   const clearFilters = () => {
@@ -139,6 +147,7 @@ export const useProductFilters = (products) => {
     setPriceRange({ min: priceStats.min, max: priceStats.max });
     setDiscountRange({ min: 0, max: 100 });
     setSortBy("default");
+    setShowOnlyDiscounted(false);
   };
 
   const hasActiveFilters =
@@ -148,7 +157,8 @@ export const useProductFilters = (products) => {
     priceRange.max !== priceStats.max ||
     discountRange.min !== 0 ||
     discountRange.max !== 100 ||
-    sortBy !== "default";
+    sortBy !== "default" ||
+    showOnlyDiscounted;
 
   return {
     filteredProducts,
@@ -164,6 +174,8 @@ export const useProductFilters = (products) => {
     setDiscountRange,
     sortBy,
     setSortBy,
+    showOnlyDiscounted,
+    setShowOnlyDiscounted,
     // Utils
     clearFilters,
     hasActiveFilters,

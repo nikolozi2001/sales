@@ -1,7 +1,7 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 
-const Header = ({ onSearch, selectedStore }) => {
+const Header = ({ onSearch, selectedStore, searchQuery }) => {
   const getStoreDisplay = () => {
     if (!selectedStore) return "ყველა მაღაზია";
     return selectedStore === '2nabiji' ? '2 ნაბიჯი' : 'ნიკორა';
@@ -28,7 +28,7 @@ const Header = ({ onSearch, selectedStore }) => {
 
           {/* Search */}
           <div className="flex-1 max-w-xl px-6">
-            <SearchBar onSearch={onSearch} />
+            <SearchBar onSearch={onSearch} searchQuery={searchQuery} />
           </div>
 
           {/* Right side indicator */}

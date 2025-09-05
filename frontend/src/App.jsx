@@ -28,6 +28,7 @@ const App = () => {
   // Handle filtering
   const {
     filteredProducts,
+    searchQuery,
     setSearchQuery,
     selectedStore,
     setSelectedStore,
@@ -42,10 +43,8 @@ const App = () => {
     setSortBy,
     showOnlyDiscounted,
     setShowOnlyDiscounted,
-    category,
-    setCategory,
     priceStats
-  } = useProductFilters(products);
+  } = useProductFilters(products || []);
 
   // Handle errors with toast notifications
   useEffect(() => {
@@ -75,6 +74,7 @@ const App = () => {
       <Header 
         onSearch={setSearchQuery}
         selectedStore={selectedStore}
+        searchQuery={searchQuery}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -85,7 +85,6 @@ const App = () => {
           onClearFilters={handleClearFilters}
           onRefresh={handleRefresh}
           sortBy={sortBy}
-          category={category}
           showOnlyDiscounted={showOnlyDiscounted}
         />
 
@@ -110,8 +109,6 @@ const App = () => {
           setSortBy={setSortBy}
           showOnlyDiscounted={showOnlyDiscounted}
           setShowOnlyDiscounted={setShowOnlyDiscounted}
-          category={category}
-          setCategory={setCategory}
           selectedStore={selectedStore}
           setSelectedStore={setSelectedStore}
           clearFilters={handleClearFilters}
