@@ -49,6 +49,31 @@ export const debounce = (func, wait) => {
 };
 
 /**
+ * Perform a fuzzy match between a string and a pattern.
+ * This is a simple implementation and can be enhanced with more sophisticated algorithms.
+ * @param {string} str - The string to search within.
+ * @param {string} pattern - The pattern to search for.
+ * @returns {boolean} - True if a fuzzy match is found, false otherwise.
+ */
+export const fuzzyMatch = (str, pattern) => {
+  if (!pattern) return true;
+  if (!str) return false;
+
+  const lowerStr = str.toLowerCase();
+  const lowerPattern = pattern.toLowerCase();
+  let patternIdx = 0;
+  let strIdx = 0;
+
+  while (strIdx < lowerStr.length && patternIdx < lowerPattern.length) {
+    if (lowerStr[strIdx] === lowerPattern[patternIdx]) {
+      patternIdx++;
+    }
+    strIdx++;
+  }
+  return patternIdx === lowerPattern.length;
+};
+
+/**
  * Filter products by search query
  * @param {Array} products - Array of products
  * @param {string} query - Search query

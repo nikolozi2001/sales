@@ -21,17 +21,6 @@ export const SORT_OPTIONS = [
   { value: 'name-asc', label: 'სახელი: ა-დან ჰ-მდე', icon: '🔤' },
 ];
 
-export const CATEGORY_OPTIONS = [
-  { value: 'all', label: 'ყველა კატეგორია', icon: '📦' },
-  { value: 'dairy', label: 'რძის პროდუქტები', icon: '🥛' },
-  { value: 'meat', label: 'ხორცეული', icon: '🥩' },
-  { value: 'bread', label: 'საცხობი', icon: '🍞' },
-  { value: 'fruits', label: 'ხილი', icon: '🍎' },
-  { value: 'vegetables', label: 'ბოსტნეული', icon: '🥕' },
-  { value: 'beverages', label: 'სასმელები', icon: '🥤' },
-  { value: 'household', label: 'საყოფაცხოვრებო', icon: '🧽' },
-];
-
 export const PRICE_RANGES = [
   { min: 0, max: 5, label: '0-5 ლარი' },
   { min: 5, max: 15, label: '5-15 ლარი' },
