@@ -23,6 +23,12 @@ const ProductCard = ({ product, store }) => {
     oldPrice = extractPrice(product.oldPrice);
     newPrice = extractPrice(product.newPrice);
     link = product.link;
+  } else if (store === "libre") {
+    title = product.name;
+    image = product.img;
+    oldPrice = extractPrice(product.oldPrice);
+    newPrice = extractPrice(product.newPrice);
+    link = product.link;
   }
 
   const discountPct = calculateDiscountPercentage(oldPrice, newPrice);

@@ -9,6 +9,7 @@ app.use(cors());
 const PORT = 3000;
 
 const BASE_URL = "https://nikorasupermarket.ge";
+const LIBRE_URL = "https://libre.ge/productebi/boom-price";
 
 async function scrapeProducts() {
   const browser = await puppeteer.launch({ headless: true });
@@ -88,6 +89,34 @@ async function scrapeNikora() {
   }
 }
 
+async function scrapeLibre() {
+  try {
+    const { data } = await axios.get(LIBRE_URL);
+    const $ = cheerio.load(data);
+
+    const products = [];
+
+    $(".home__promotions_products").each((_, el) => {
+      const link = "https://libre.ge" + $(el).find("a.link-secondary").attr("href");
+      const img = $(el).find("img.products__image").attr("src");
+      const name = $(el).find(".product_card__title .line_2").text().trim();
+
+      const lari = $(el).find(".product_card__new_price_lari").text().trim();
+      const tetri = $(el).find(".product_card__new_price_tetri").text().trim();
+      const newPrice = `${lari}.${tetri} ₾`;
+
+      const oldPrice = $(el).find(".product_card__old_price").text().trim() + " ₾";
+
+      products.push({ name, link, img, newPrice, oldPrice });
+    });
+
+    return products;
+  } catch (err) {
+    console.error("Libre scraping error:", err.message);
+    return [];
+  }
+}
+
 // API routes
 app.get("/products", async (req, res) => {
   try {
@@ -101,6 +130,11 @@ app.get("/products", async (req, res) => {
 
 app.get("/nikora", async (req, res) => {
   const products = await scrapeNikora();
+  res.json(products);
+});
+
+app.get("/libre", async (req, res) => {
+  const products = await scrapeLibre();
   res.json(products);
 });
 
