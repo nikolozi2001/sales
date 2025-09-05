@@ -13,11 +13,11 @@ export const STORES = [
     color: "bg-emerald-600",
     endpoint: "/nikora",
   },
-  { id: "libre", name: "ლიბრე", color: "bg-purple-600", endpoint: "/libre" },
+  { id: "libre", name: "ლიბრე (ბუმ ფასი)", color: "bg-purple-600", endpoint: "/libre" },
   {
     id: "libre-products",
     name: "ლიბრე (პროდუქტები)",
-    color: "bg-purple-100",
+    color: "bg-purple-200",
     endpoint: "/libre-products",
   },
 ];
