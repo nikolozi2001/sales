@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SORT_OPTIONS, CATEGORY_OPTIONS, PRICE_RANGES, DISCOUNT_RANGES } from '../constants';
 import { showInfoToast } from '../utils/toast';
+import StoreSwitcher from './StoreSwitcher';
 
 const FilterPanel = ({
   priceRange,
@@ -13,6 +14,8 @@ const FilterPanel = ({
   setShowOnlyDiscounted,
   category,
   setCategory,
+  selectedStore,
+  setSelectedStore,
   clearFilters,
   hasActiveFilters,
   priceStats,
@@ -87,6 +90,19 @@ const FilterPanel = ({
       {/* Filter Content */}
       {isExpanded && (
         <div className="p-4 space-y-6">
+          {/* Store Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              მაღაზია
+            </label>
+            <div className="flex justify-center">
+              <StoreSwitcher
+                selected={selectedStore}
+                setSelected={setSelectedStore}
+              />
+            </div>
+          </div>
+
           {/* Sort Options */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

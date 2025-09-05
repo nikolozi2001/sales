@@ -1,5 +1,5 @@
 import React from 'react';
-import { SORT_OPTIONS, DISCOUNT_RANGES } from '../constants';
+import { SORT_OPTIONS, DISCOUNT_RANGES, STORES } from '../constants';
 import { showInfoToast } from '../utils/toast';
 
 const QuickFilters = ({ 
@@ -8,6 +8,8 @@ const QuickFilters = ({
   showOnlyDiscounted, 
   setShowOnlyDiscounted,
   setDiscountRange,
+  selectedStore,
+  setSelectedStore,
   clearFilters,
   hasActiveFilters 
 }) => {
@@ -27,6 +29,12 @@ const QuickFilters = ({
     showInfoToast(showOnlyDiscounted ? 'ყველა პროდუქტი' : '🔥 მხოლოდ ფასდაკლებული');
   };
 
+  const handleStoreChange = (storeId) => {
+    setSelectedStore(storeId);
+    const store = STORES.find(s => s.id === storeId);
+    showInfoToast(`🏪 ${store?.name || 'ყველა მაღაზია'}`);
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 lg:hidden">
       <div className="flex items-center justify-between mb-3">
@@ -39,6 +47,36 @@ const QuickFilters = ({
             გასუფთავება
           </button>
         )}
+      </div>
+
+      {/* Quick Store Filter */}
+      <div className="mb-3">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          <button
+            onClick={() => handleStoreChange(null)}
+            className={`flex-shrink-0 px-3 py-2 text-xs rounded-lg border transition-all ${
+              selectedStore === null
+                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            🏪 ყველა მაღაზია
+          </button>
+          
+          {STORES.map((store) => (
+            <button
+              key={store.id}
+              onClick={() => handleStoreChange(store.id)}
+              className={`flex-shrink-0 px-3 py-2 text-xs rounded-lg border transition-all ${
+                selectedStore === store.id
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              {store.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Quick Sort */}

@@ -1,8 +1,12 @@
 import React from "react";
-import StoreSwitcher from "./StoreSwitcher";
 import SearchBar from "./SearchBar";
 
-const Header = ({ onSearch, selectedStore, setSelectedStore }) => {
+const Header = ({ onSearch, selectedStore }) => {
+  const getStoreDisplay = () => {
+    if (!selectedStore) return "ყველა მაღაზია";
+    return selectedStore === '2nabiji' ? '2 ნაბიჯი' : 'ნიკორა';
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,7 +21,7 @@ const Header = ({ onSearch, selectedStore, setSelectedStore }) => {
                 ფასდაკლებები
               </span>
               <span className="text-xs text-gray-500 font-medium">
-                საქართველოს მაღაზიები
+                {getStoreDisplay()}
               </span>
             </div>
           </div>
@@ -27,12 +31,18 @@ const Header = ({ onSearch, selectedStore, setSelectedStore }) => {
             <SearchBar onSearch={onSearch} />
           </div>
 
-          {/* Store Switcher */}
+          {/* Right side indicator */}
           <div className="flex items-center gap-3">
-            <StoreSwitcher
-              selected={selectedStore}
-              setSelected={setSelectedStore}
-            />
+            {selectedStore && (
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+                <div className={`w-2.5 h-2.5 rounded-full ${
+                  selectedStore === '2nabiji' ? 'bg-sky-600' : 'bg-emerald-600'
+                }`}></div>
+                <span className="text-sm font-medium text-emerald-700">
+                  {getStoreDisplay()}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
