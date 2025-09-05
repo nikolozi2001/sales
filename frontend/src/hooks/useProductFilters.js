@@ -33,6 +33,8 @@ export const useProductFilters = (products) => {
       })
       .filter((price) => price > 0);
 
+    if (prices.length === 0) return { min: 0, max: 1000 };
+
     return {
       min: Math.floor(Math.min(...prices) || 0),
       max: Math.ceil(Math.max(...prices) || 1000),

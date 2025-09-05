@@ -14,7 +14,7 @@ export const LOADING_STATES = {
 
 // Filter constants
 export const SORT_OPTIONS = [
-  { value: 'default', label: 'დანაწყისით', icon: '🔀' },
+  { value: 'default', label: 'საწყისი', icon: '🔀' },
   { value: 'price-asc', label: 'ფასი: იაფიდან ძვირისკენ', icon: '💰' },
   { value: 'price-desc', label: 'ფასი: ძვირიდან იაფისკენ', icon: '💸' },
   { value: 'discount-desc', label: 'ფასდაკლება: მაღლიდან დაბლისკენ', icon: '🔥' },

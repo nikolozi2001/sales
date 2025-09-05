@@ -20,13 +20,31 @@ const FilterPanel = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handlePriceRangeSelect = (range) => {
-    setPriceRange(range);
-    showInfoToast(`ფასის ფილტრი: ${range.min}-${range.max} ლარი`);
+    const defaultMin = 0;
+    const defaultMax = 1000;
+
+    const resetRange = {
+      min: Number.isFinite(priceStats.min) ? priceStats.min : defaultMin,
+      max: Number.isFinite(priceStats.max) ? priceStats.max : defaultMax,
+    };
+
+    if (priceRange.min === range.min && priceRange.max === range.max) {
+      setPriceRange(resetRange);
+      showInfoToast("ფასის ფილტრი გასუფთავებულია");
+    } else {
+      setPriceRange(range);
+      showInfoToast(`ფასის ფილტრი: ${range.min}-${range.max} ლარი`);
+    }
   };
 
   const handleDiscountRangeSelect = (range) => {
-    setDiscountRange(range);
-    showInfoToast(`ფასდაკლების ფილტრი: ${range.min}%-${range.max}%`);
+    if (discountRange.min === range.min && discountRange.max === range.max) {
+      setDiscountRange({ min: 0, max: 100 });
+      showInfoToast("ფასდაკლების ფილტრი გასუფთავებულია");
+    } else {
+      setDiscountRange(range);
+      showInfoToast(`ფასდაკლების ფილტრი: ${range.min}%-${range.max}%`);
+    }
   };
 
   const handleSortChange = (value) => {
@@ -109,7 +127,7 @@ const FilterPanel = ({
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  onClick={() => handleSortChange(option.value)}
+                  onClick={() => handleSortChange(option.value === sortBy ? "default" : option.value)}
                   className={`p-3 text-left rounded-xl border text-sm transition-all ${
                     sortBy === option.value
                       ? "border-blue-500 bg-blue-50 text-blue-700"
