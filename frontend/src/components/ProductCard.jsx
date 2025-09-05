@@ -37,70 +37,73 @@ const ProductCard = ({ product, store }) => {
   };
 
   return (
-    <article className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01] transition-all duration-200">
-      <div className="relative">
+    <article className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 ease-out">
+      <div className="relative overflow-hidden">
         {image ? (
           <img
             src={image}
             alt={title}
-            className="w-full h-48 object-cover"
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             onError={handleImageError}
           />
         ) : (
-          <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+          <div className="w-full h-48 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
             <span className="text-gray-400 text-sm">No Image</span>
           </div>
         )}
 
-        {/* Store badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm">
+        {/* Store badge with improved styling */}
+        <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg border border-white/20">
           <span
-            className={`inline-block h-2.5 w-2.5 rounded-full ${storeInfo?.color}`}
+            className={`inline-block h-2.5 w-2.5 rounded-full ${storeInfo?.color} shadow-sm`}
           ></span>
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-semibold text-gray-700">
             {storeInfo?.name}
           </span>
         </div>
 
-        {/* Discount badge */}
+        {/* Enhanced discount badge */}
         {discountPct > 0 && (
-          <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold shadow-sm">
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg border border-red-400/30">
             -{discountPct}%
           </div>
         )}
+
+        {/* Overlay gradient for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
 
-      <div className="p-4">
-        <h3 className="text-sm font-medium line-clamp-2 min-h-[2.5rem] mb-3 text-gray-800">
+      <div className="p-5">
+        <h3 className="text-sm font-semibold line-clamp-2 min-h-[2.5rem] mb-4 text-gray-800 group-hover:text-gray-900 transition-colors">
           {title || "Product"}
         </h3>
 
-        <div className="flex items-baseline gap-3 mb-4">
+        <div className="flex items-baseline gap-3 mb-5">
           {newPrice > 0 && (
-            <div className="text-lg font-bold text-emerald-600">
+            <div className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               {formatPrice(newPrice)}
             </div>
           )}
           {oldPrice > 0 && oldPrice !== newPrice && (
-            <div className="text-sm text-gray-400 line-through">
+            <div className="text-sm text-gray-400 line-through font-medium">
               {formatPrice(oldPrice)}
             </div>
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleProductClick}
             disabled={!link}
-            className={`flex-1 px-3 py-1.5 rounded-md border text-sm transition-colors ${
+            className={`flex-1 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
               link
-                ? "border-gray-200 text-gray-600 hover:bg-gray-50 cursor-pointer"
-                : "border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50"
+                ? "border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm cursor-pointer"
+                : "border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50/50"
             }`}
           >
             დეტალურად
           </button>
-          <button className="flex-1 px-3 py-1.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium hover:from-emerald-700 hover:to-teal-700 transition-colors">
+          <button className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-200 transition-all duration-200 transform hover:scale-[1.02]">
             კალათაში
           </button>
         </div>
