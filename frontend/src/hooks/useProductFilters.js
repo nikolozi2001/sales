@@ -100,12 +100,12 @@ export const useProductFilters = (products) => {
 
         case "discount-desc": {
           const discountA = calculateDiscountPercentage(
-            extractPrice(a.oldPrice || "0"),
-            a.price ? extractPrice(a.price) : extractPrice(a.newPrice || "0")
+            extractPrice(a.product.oldPrice || "0"),
+            a.product.price ? extractPrice(a.product.price) : extractPrice(a.product.newPrice || "0")
           );
           const discountB = calculateDiscountPercentage(
-            extractPrice(b.oldPrice || "0"),
-            b.price ? extractPrice(b.price) : extractPrice(b.newPrice || "0")
+            extractPrice(b.product.oldPrice || "0"),
+            b.product.price ? extractPrice(b.product.price) : extractPrice(b.product.newPrice || "0")
           );
           return discountB - discountA;
         }
