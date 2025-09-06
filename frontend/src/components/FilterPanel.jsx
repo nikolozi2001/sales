@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { SORT_OPTIONS, PRICE_RANGES, DISCOUNT_RANGES } from "../constants";
 import { showInfoToast } from "../utils/toast";
 import StoreSwitcher from "./StoreSwitcher";
@@ -20,7 +20,32 @@ const FilterPanel = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const getActiveFilterText = () => {
+  // Debounced price range update
+  const debounceTimeoutRef = useRef(null);
+
+  const debouncedSetPriceRange = useCallback(
+    (newRange) => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        setPriceRange(newRange);
+      }, 300); // 300ms debounce
+    },
+    [setPriceRange]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const activeFilters = useMemo(() => {
     const filters = [];
 
     if (selectedStore) {
@@ -38,9 +63,7 @@ const FilterPanel = ({
     }
 
     return filters;
-  };
-
-  const activeFilters = getActiveFilterText();
+  }, [selectedStore, sortBy]);
 
   const handlePriceRangeSelect = (range) => {
     const defaultMin = 0;
@@ -233,7 +256,7 @@ const FilterPanel = ({
                 placeholder="მინ"
                 value={priceRange.min}
                 onChange={(e) =>
-                  setPriceRange({
+                  debouncedSetPriceRange({
                     ...priceRange,
                     min: Number(e.target.value),
                   })
@@ -246,7 +269,7 @@ const FilterPanel = ({
                 placeholder="მაქს"
                 value={priceRange.max}
                 onChange={(e) =>
-                  setPriceRange({
+                  debouncedSetPriceRange({
                     ...priceRange,
                     max: Number(e.target.value),
                   })
