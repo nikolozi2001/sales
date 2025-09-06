@@ -54,15 +54,15 @@ const FilterPanel = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
-      {/* Filter Header */}
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-md mb-6 overflow-hidden">
+      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm">
             <span className="text-white text-lg">🔍</span>
           </div>
           <div>
-            <h3 className="text-gray-800">ფილტრები</h3>
+            <h3 className="text-gray-800 font-medium">ფილტრები</h3>
             <p className="text-sm text-gray-500">
               {totalProducts} პროდუქტი
               {hasActiveFilters && " • ფილტრები აქტიურია"}
@@ -74,7 +74,7 @@ const FilterPanel = ({
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="px-3 py-1.5 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-all"
             >
               გასუფთავება
             </button>
@@ -102,10 +102,10 @@ const FilterPanel = ({
         </div>
       </div>
 
-      {/* Filter Content */}
+      {/* Content */}
       {isExpanded && (
-        <div className="p-4 space-y-6">
-          {/* Store Filter */}
+        <div className="p-5 space-y-6">
+          {/* Store Switcher */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               მაღაზია
@@ -127,10 +127,14 @@ const FilterPanel = ({
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  onClick={() => handleSortChange(option.value === sortBy ? "default" : option.value)}
-                  className={`p-3 text-left rounded-xl border text-sm transition-all ${
+                  onClick={() =>
+                    handleSortChange(
+                      option.value === sortBy ? "default" : option.value
+                    )
+                  }
+                  className={`p-3 text-left rounded-xl border text-sm font-medium transition-all ${
                     sortBy === option.value
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      ? "border-blue-500 bg-blue-50 text-blue-700 shadow-sm"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
@@ -153,7 +157,7 @@ const FilterPanel = ({
                   onClick={() => handlePriceRangeSelect(range)}
                   className={`p-2 text-sm rounded-lg border transition-all ${
                     priceRange.min === range.min && priceRange.max === range.max
-                      ? "border-orange-500 bg-orange-50 text-orange-700"
+                      ? "border-orange-500 bg-orange-50 text-orange-700 shadow-sm"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
@@ -162,40 +166,36 @@ const FilterPanel = ({
               ))}
             </div>
 
-            {/* Custom Price Range */}
+            {/* Custom Price Inputs */}
             <div className="flex items-center gap-3">
-              <div className="flex-1">
-                <input
-                  type="number"
-                  placeholder="მინ"
-                  value={priceRange.min}
-                  onChange={(e) =>
-                    setPriceRange({
-                      ...priceRange,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-300 focus:border-orange-500"
-                />
-              </div>
+              <input
+                type="number"
+                placeholder="მინ"
+                value={priceRange.min}
+                onChange={(e) =>
+                  setPriceRange({
+                    ...priceRange,
+                    min: Number(e.target.value),
+                  })
+                }
+                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-300 focus:border-orange-500"
+              />
               <span className="text-gray-400">-</span>
-              <div className="flex-1">
-                <input
-                  type="number"
-                  placeholder="მაქს"
-                  value={priceRange.max}
-                  onChange={(e) =>
-                    setPriceRange({
-                      ...priceRange,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-300 focus:border-orange-500"
-                />
-              </div>
+              <input
+                type="number"
+                placeholder="მაქს"
+                value={priceRange.max}
+                onChange={(e) =>
+                  setPriceRange({
+                    ...priceRange,
+                    max: Number(e.target.value),
+                  })
+                }
+                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-orange-300 focus:border-orange-500"
+              />
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              ფასების დიაპაზონი: {priceStats.min}-{priceStats.max} ლარი
+              ფასების დიაპაზონი: {priceStats.min}-{priceStats.max} ₾
             </p>
           </div>
 
@@ -204,7 +204,7 @@ const FilterPanel = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               ფასდაკლების დიაპაზონი
             </label>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-3">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {DISCOUNT_RANGES.map((range, index) => (
                 <button
                   key={index}
@@ -212,7 +212,7 @@ const FilterPanel = ({
                   className={`p-2 text-sm rounded-lg border transition-all ${
                     discountRange.min === range.min &&
                     discountRange.max === range.max
-                      ? "border-red-500 bg-red-50 text-red-700"
+                      ? "border-red-500 bg-red-50 text-red-700 shadow-sm"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
