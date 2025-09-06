@@ -8,6 +8,8 @@ export const toastMessages = {
     filtersCleared: 'ფილტრები გასუფთავდა',
     dataRefreshed: 'მონაცემები განახლდა',
     copySuccess: 'კოპირება წარმატებულია',
+    addFavorite: 'დაემატა რჩეულებში!',
+    removeFavorite: 'ამოღებულია რჩეულებიდან!',
   },
   error: {
     loadingFailed: 'მონაცემების ჩატვირთვა ვერ მოხერხდა',
@@ -77,6 +79,10 @@ export const showProductToast = (action, productName) => {
       return showSuccessToast(`${productName} - ${toastMessages.success.productAddedToCart}`);
     case 'view':
       return showInfoToast(`${productName} - ${toastMessages.success.productViewed}`);
+    case 'addFavorite':
+      return showSuccessToast(`${productName} - ${toastMessages.success.addFavorite}`);
+    case 'removeFavorite':
+      return showInfoToast(`${productName} - ${toastMessages.success.removeFavorite}`);
     default:
       return showInfoToast(productName);
   }

@@ -7,6 +7,68 @@ import {
 } from "../utils/helpers";
 
 /**
+ * Custom hook for managing product favorites
+ * @returns {Object} - Favorites state and functions
+ */
+export const useFavorites = () => {
+  const [favorites, setFavorites] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('productFavorites');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  const toggleFavorite = (product, store) => {
+    const productKey = `${store}-${product.link || product.name}`;
+    
+    setFavorites(prev => {
+      const isFav = prev.some(fav => fav.key === productKey);
+      let newFavs;
+      
+      if (isFav) {
+        newFavs = prev.filter(fav => fav.key !== productKey);
+      } else {
+        newFavs = [...prev, {
+          ...product,
+          store,
+          key: productKey,
+          addedAt: new Date().toISOString()
+        }];
+      }
+      
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('productFavorites', JSON.stringify(newFavs));
+      }
+      return newFavs;
+    });
+  };
+
+  const isFavorite = (product, store) => {
+    const productKey = `${store}-${product.link || product.name}`;
+    return favorites.some(fav => fav.key === productKey);
+  };
+
+  const removeFavorite = (productKey) => {
+    setFavorites(prev => {
+      const newFavs = prev.filter(fav => fav.key !== productKey);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('productFavorites', JSON.stringify(newFavs));
+      }
+      return newFavs;
+    });
+  };
+
+  return {
+    favorites,
+    toggleFavorite,
+    isFavorite,
+    removeFavorite,
+    favoritesCount: favorites.length
+  };
+};
+
+/**
  * Custom hook for managing advanced product filters
  * @param {Array} products - Array of products to filter
  * @returns {Object} - Filtered products and filter controls

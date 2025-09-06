@@ -6,9 +6,34 @@ import {
   formatPrice,
 } from "../utils/helpers";
 import { showProductToast, showErrorToast } from "../utils/toast";
+import { useFavorites } from "../hooks/useProductFilters";
+
+// Price Change Indicator Component
+const PriceChangeIndicator = ({ oldPrice, newPrice }) => {
+  if (!oldPrice || !newPrice || oldPrice <= newPrice) return null;
+
+  const change = ((newPrice - oldPrice) / oldPrice) * 100;
+  const isIncrease = change > 0;
+
+  return (
+    <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+      isIncrease
+        ? 'bg-red-100 text-red-700 border border-red-200'
+        : 'bg-green-100 text-green-700 border border-green-200'
+    }`}>
+      <span className="text-sm">
+        {isIncrease ? '↗' : '↘'}
+      </span>
+      <span>
+        {Math.abs(change).toFixed(1)}%
+      </span>
+    </div>
+  );
+};
 
 const ProductCard = ({ product, store }) => {
   const storeInfo = STORES.find((s) => s.id === store);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   let title, image, oldPrice, newPrice, link;
 
@@ -57,6 +82,13 @@ const ProductCard = ({ product, store }) => {
     showProductToast("addToCart", title || "პროდუქტი");
   };
 
+  const handleToggleFavorite = (e) => {
+    e.stopPropagation();
+    toggleFavorite(product, store);
+    const isFav = isFavorite(product, store);
+    showProductToast(isFav ? "removeFavorite" : "addFavorite", title || "პროდუქტი");
+  };
+
   return (
     <article className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 ease-out">
       <div className="relative overflow-hidden">
@@ -83,9 +115,34 @@ const ProductCard = ({ product, store }) => {
           </span>
         </div>
 
+        {/* Favorite button */}
+        <button
+          onClick={handleToggleFavorite}
+          className={`absolute top-3 right-3 p-2 rounded-full shadow-lg border transition-all duration-200 ${
+            isFavorite(product, store)
+              ? 'bg-red-500 text-white border-red-400 hover:bg-red-600'
+              : 'bg-white/95 text-gray-400 border-white/20 hover:text-red-500 hover:bg-white'
+          }`}
+          title={isFavorite(product, store) ? "Remove from favorites" : "Add to favorites"}
+        >
+          <svg
+            className="w-4 h-4"
+            fill={isFavorite(product, store) ? "currentColor" : "none"}
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
+
         {/* Enhanced discount badge */}
         {discountPct > 0 && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg border border-red-400/30">
+          <div className="absolute top-3 right-16 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg border border-red-400/30">
             -{discountPct}%
           </div>
         )}
@@ -110,6 +167,7 @@ const ProductCard = ({ product, store }) => {
               {formatPrice(oldPrice)}
             </div>
           )}
+          <PriceChangeIndicator oldPrice={oldPrice} newPrice={newPrice} />
         </div>
 
         <div className="flex items-center gap-2">
