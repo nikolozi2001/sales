@@ -15,7 +15,7 @@ frontend/src/
 │   ├── ProductGrid.jsx  # Grid layout for products
 │   ├── LoadingSpinner.jsx # Loading state component
 │   ├── ErrorMessage.jsx # Error display component
-│   ├── StatsBar.jsx     # Statistics and actions bar
+│   ├── FilterPanel.jsx  # Statistics, filters and actions
 │   └── index.js         # Component exports
 ├── hooks/               # Custom React hooks
 │   ├── useProducts.js   # Product data management

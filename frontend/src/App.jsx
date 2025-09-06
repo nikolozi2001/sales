@@ -6,7 +6,6 @@ import {
   Header,
   Footer,
   ProductGrid,
-  StatsBar,
   FilterPanel,
   QuickFilters,
 } from "./components";
@@ -82,34 +81,6 @@ const App = () => {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <StatsBar
-            totalProducts={products.length}
-            selectedStore={selectedStore}
-            hasActiveFilters={hasActiveFilters}
-            onClearFilters={handleClearFilters}
-            onRefresh={handleRefresh}
-            sortBy={sortBy}
-            showOnlyDiscounted={showOnlyDiscounted}
-          />
-        </div>
-
-        <div className="mb-6 lg:hidden">
-          {" "}
-          {/* Added lg:hidden because QuickFilters is hidden on larger screens */}
-          <QuickFilters
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            showOnlyDiscounted={showOnlyDiscounted}
-            setShowOnlyDiscounted={setShowOnlyDiscounted}
-            setDiscountRange={setDiscountRange}
-            selectedStore={selectedStore}
-            setSelectedStore={setSelectedStore}
-            clearFilters={handleClearFilters}
-            hasActiveFilters={hasActiveFilters}
-          />
-        </div>
-
         <FilterPanel
           priceRange={priceRange}
           setPriceRange={setPriceRange}
@@ -125,6 +96,7 @@ const App = () => {
           hasActiveFilters={hasActiveFilters}
           priceStats={priceStats}
           totalProducts={products.length}
+          onRefresh={handleRefresh}
         />
 
         <ProductGrid
