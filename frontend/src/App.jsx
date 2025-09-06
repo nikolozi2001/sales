@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
-import './App.css';
+import React, { useEffect } from "react";
+import "./App.css";
 
 // Components
-import { 
-  Header, 
-  Footer, 
-  ProductGrid, 
+import {
+  Header,
+  Footer,
+  ProductGrid,
   StatsBar,
   FilterPanel,
-  QuickFilters
-} from './components';
+  QuickFilters,
+} from "./components";
 
 // Hooks
-import { useProducts } from './hooks';
+import { useProducts } from "./hooks";
 
 // Toast utilities
-import { showErrorToast, showSuccessToast, toastMessages } from './utils/toast';
+import { showErrorToast, showSuccessToast, toastMessages } from "./utils/toast";
 
 /**
  * Main Application Component
@@ -68,14 +68,14 @@ const App = () => {
       await refresh();
       showSuccessToast(toastMessages.success.dataRefreshed);
     } catch (err) {
-      console.error('Refresh failed:', err);
+      console.error("Refresh failed:", err);
       showErrorToast(toastMessages.error.networkError);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 text-gray-800">
-      <Header 
+      <Header
         onSearch={setSearchQuery}
         selectedStore={selectedStore}
         searchQuery={searchQuery}
@@ -94,7 +94,9 @@ const App = () => {
           />
         </div>
 
-        <div className="mb-6 lg:hidden"> {/* Added lg:hidden because QuickFilters is hidden on larger screens */}
+        <div className="mb-6 lg:hidden">
+          {" "}
+          {/* Added lg:hidden because QuickFilters is hidden on larger screens */}
           <QuickFilters
             sortBy={sortBy}
             setSortBy={setSortBy}
@@ -125,9 +127,9 @@ const App = () => {
           totalProducts={products.length}
         />
 
-        <ProductGrid 
-          products={products} 
-          loading={loading} 
+        <ProductGrid
+          products={products}
+          loading={loading}
           error={error}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
