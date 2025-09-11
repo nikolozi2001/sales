@@ -1,2 +1,2 @@
 export { useProducts } from './useProducts';
-export { useProductFilters } from './useProductFilters';
+export { useProductFilters, useFavorites } from './useProductFilters';

@@ -41,6 +41,8 @@ const ProductGrid = ({
   setCurrentPage,
   totalPages,
   isFiltering,
+  toggleFavorite,
+  isFavorite,
 }) => {
   if (loading) {
     return (
@@ -108,6 +110,8 @@ const ProductGrid = ({
             key={`${item.store}-${item.product.id || index}`}
             product={item.product}
             store={item.store}
+            toggleFavorite={toggleFavorite}
+            isFavorite={isFavorite}
           />
         ))}
       </div>

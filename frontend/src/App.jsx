@@ -8,6 +8,7 @@ import {
   ProductGrid,
   FilterPanel,
   QuickFilters,
+  FavoritesSection,
 } from "./components";
 
 // Hooks
@@ -47,6 +48,12 @@ const App = () => {
     productsPerPage,
     totalPages,
     isFiltering,
+    // Favorites
+    favorites,
+    toggleFavorite,
+    isFavorite,
+    removeFavorite,
+    favoritesCount,
   } = useProducts();
 
   // Handle errors with toast notifications
@@ -99,6 +106,14 @@ const App = () => {
           onRefresh={handleRefresh}
         />
 
+        <FavoritesSection
+          favorites={favorites}
+          removeFavorite={removeFavorite}
+          loading={loading}
+          toggleFavorite={toggleFavorite}
+          isFavorite={isFavorite}
+        />
+
         <ProductGrid
           products={products}
           loading={loading}
@@ -108,6 +123,8 @@ const App = () => {
           productsPerPage={productsPerPage}
           totalPages={totalPages}
           isFiltering={isFiltering}
+          toggleFavorite={toggleFavorite}
+          isFavorite={isFavorite}
         />
 
         <Footer />

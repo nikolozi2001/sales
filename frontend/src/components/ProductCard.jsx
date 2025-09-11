@@ -29,9 +29,12 @@ const PriceChangeIndicator = ({ oldPrice, newPrice }) => {
   );
 };
 
-const ProductCard = ({ product, store }) => {
+const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: isFav }) => {
   const storeInfo = STORES.find((s) => s.id === store);
-  const { toggleFavorite, isFavorite } = useFavorites();
+  // Use provided functions or fallback to hook
+  const { toggleFavorite: hookToggle, isFavorite: hookIsFav } = useFavorites();
+  const toggleFavorite = toggleFav || hookToggle;
+  const isFavorite = isFav || hookIsFav;
 
   let title, image, oldPrice, newPrice, link;
 

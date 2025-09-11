@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { fetchAllProducts } from '../services/api';
 import { LOADING_STATES } from '../constants';
-import { useProductFilters } from './useProductFilters';
+import { useProductFilters, useFavorites } from './useProductFilters';
 
 const PRODUCTS_PER_PAGE = 24;
 
@@ -17,7 +17,7 @@ export const useProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
 
-  // Integrate product filtering
+  // Integrate product filtering and favorites
   const {
     filteredProducts,
     searchQuery,
@@ -36,6 +36,15 @@ export const useProducts = () => {
     setShowOnlyDiscounted,
     priceStats,
   } = useProductFilters(allProducts);
+
+  // Favorites functionality
+  const {
+    favorites,
+    toggleFavorite,
+    isFavorite,
+    removeFavorite,
+    favoritesCount,
+  } = useFavorites();
 
   const fetchProducts = async () => {
     setLoadingState(LOADING_STATES.LOADING);
@@ -116,5 +125,11 @@ export const useProducts = () => {
     setCurrentPage,
     productsPerPage: PRODUCTS_PER_PAGE,
     totalPages,
+    // Favorites-related exports
+    favorites,
+    toggleFavorite,
+    isFavorite,
+    removeFavorite,
+    favoritesCount,
   };
 };

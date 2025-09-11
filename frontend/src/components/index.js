@@ -9,3 +9,4 @@ export { default as SearchBar } from './SearchBar';
 export { default as StoreSwitcher } from './StoreSwitcher';
 export { default as FilterPanel } from './FilterPanel';
 export { default as QuickFilters } from './QuickFilters';
+export { default as FavoritesSection } from './FavoritesSection';
