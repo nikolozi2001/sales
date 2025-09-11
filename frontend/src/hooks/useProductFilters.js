@@ -20,7 +20,14 @@ export const useFavorites = () => {
   });
 
   const toggleFavorite = (product, store) => {
-    const productKey = `${store}-${product.link || product.name}`;
+    // Generate unique key based on store-specific product identifier
+    let productIdentifier;
+    if (store === "2nabiji") {
+      productIdentifier = product.title;
+    } else {
+      productIdentifier = product.link || product.name;
+    }
+    const productKey = `${store}-${productIdentifier}`;
     
     setFavorites(prev => {
       const isFav = prev.some(fav => fav.key === productKey);
@@ -45,7 +52,14 @@ export const useFavorites = () => {
   };
 
   const isFavorite = (product, store) => {
-    const productKey = `${store}-${product.link || product.name}`;
+    // Generate unique key based on store-specific product identifier
+    let productIdentifier;
+    if (store === "2nabiji") {
+      productIdentifier = product.title;
+    } else {
+      productIdentifier = product.link || product.name;
+    }
+    const productKey = `${store}-${productIdentifier}`;
     return favorites.some(fav => fav.key === productKey);
   };
 
