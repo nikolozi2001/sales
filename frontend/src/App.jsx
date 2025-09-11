@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 // Components
@@ -9,13 +9,15 @@ import {
   FilterPanel,
   QuickFilters,
   FavoritesSection,
+  QuickActionsMenu,
+  ProductComparisonModal,
 } from "./components";
 
 // Hooks
 import { useProducts } from "./hooks";
 
 // Toast utilities
-import { showErrorToast, showSuccessToast, toastMessages } from "./utils/toast";
+import { showErrorToast, showSuccessToast, showProductToast, toastMessages } from "./utils/toast";
 
 /**
  * Main Application Component
@@ -56,6 +58,12 @@ const App = () => {
     favoritesCount,
   } = useProducts();
 
+  // Selection state for bulk operations
+  const [showSelection, setShowSelection] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [comparisonProducts, setComparisonProducts] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+
   // Handle errors with toast notifications
   useEffect(() => {
     if (error) {
@@ -77,6 +85,103 @@ const App = () => {
       console.error("Refresh failed:", err);
       showErrorToast(toastMessages.error.networkError);
     }
+  };
+
+  // Selection handlers
+  const handleSelectionChange = (product, store, isSelected) => {
+    if (isSelected) {
+      // Check if already selected to avoid duplicates
+      const alreadySelected = selectedProducts.some(
+        selected => {
+          if (store === "2nabiji") {
+            return selected.store === store && selected.product.title === product.title;
+          } else {
+            return selected.store === store && (selected.product.link === product.link || selected.product.name === product.name);
+          }
+        }
+      );
+      if (!alreadySelected) {
+        setSelectedProducts(prev => [...prev, { product, store }]);
+      }
+    } else {
+      setSelectedProducts(prev => prev.filter(
+        selected => {
+          if (store === "2nabiji") {
+            return !(selected.store === store && selected.product.title === product.title);
+          } else {
+            return !(selected.store === store && (selected.product.link === product.link || selected.product.name === product.name));
+          }
+        }
+      ));
+    }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedProducts([]);
+    setShowSelection(false);
+  };
+
+  // Bulk operations
+  const handleBulkAddToCart = (products) => {
+    products.forEach(item => {
+      showProductToast("addToCart", item.product.title || item.product.name || "პროდუქტი");
+    });
+    showSuccessToast(`${products.length} პროდუქტი დაემატა კალათაში`);
+  };
+
+  const handleCompare = (products) => {
+    setComparisonProducts(products);
+    setShowComparison(true);
+  };
+
+  const handleShare = (products) => {
+    const shareText = products.map(item => {
+      const title = item.store === "2nabiji" ? item.product.title : item.product.name;
+      return `• ${title}`;
+    }).join('\n');
+
+    const fullText = `გაუზიარე ეს პროდუქტები:\n${shareText}`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'პროდუქტების სია',
+        text: fullText,
+      });
+    } else {
+      navigator.clipboard.writeText(fullText).then(() => {
+        showSuccessToast('სია დაკოპირდა კლიპბორდში');
+      });
+    }
+  };
+
+  const handleToggleSelection = () => {
+    const newShowSelection = !showSelection;
+    setShowSelection(newShowSelection);
+    if (!newShowSelection) {
+      // Clear selection when disabling selection mode
+      setSelectedProducts([]);
+    }
+  };
+
+  const handleExportFavorites = () => {
+    const csvContent = [
+      ['სახელი', 'მაღაზია', 'ახალი ფასი', 'ძველი ფასი', 'დამატების თარიღი'],
+      ...favorites.map(fav => [
+        fav.title || fav.name || '',
+        fav.store,
+        fav.newPrice || fav.price || '',
+        fav.oldPrice || '',
+        fav.addedAt || ''
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `favorites_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+
+    showSuccessToast('ფავორიტები ექსპორტირდა CSV ფაილში');
   };
 
   return (
@@ -104,6 +209,8 @@ const App = () => {
           priceStats={priceStats}
           totalProducts={products.length}
           onRefresh={handleRefresh}
+          showSelection={showSelection}
+          onToggleSelection={handleToggleSelection}
         />
 
         <FavoritesSection
@@ -112,6 +219,9 @@ const App = () => {
           loading={loading}
           toggleFavorite={toggleFavorite}
           isFavorite={isFavorite}
+          showSelection={showSelection}
+          selectedProducts={selectedProducts}
+          onSelectionChange={handleSelectionChange}
         />
 
         <ProductGrid
@@ -125,10 +235,35 @@ const App = () => {
           isFiltering={isFiltering}
           toggleFavorite={toggleFavorite}
           isFavorite={isFavorite}
+          showSelection={showSelection}
+          selectedProducts={selectedProducts}
+          onSelectionChange={handleSelectionChange}
         />
 
         <Footer />
       </main>
+
+      {/* Quick Actions Menu */}
+      <QuickActionsMenu
+        selectedProducts={selectedProducts}
+        onClearSelection={handleClearSelection}
+        onBulkAddToCart={handleBulkAddToCart}
+        onCompare={handleCompare}
+        onShare={handleShare}
+        onExportFavorites={handleExportFavorites}
+        favoritesCount={favoritesCount}
+        showSelection={showSelection}
+      />
+
+      {/* Product Comparison Modal */}
+      {showComparison && (
+        <ProductComparisonModal
+          products={comparisonProducts}
+          onClose={() => setShowComparison(false)}
+          toggleFavorite={toggleFavorite}
+          isFavorite={isFavorite}
+        />
+      )}
     </div>
   );
 };

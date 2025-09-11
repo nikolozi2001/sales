@@ -10,3 +10,5 @@ export { default as StoreSwitcher } from './StoreSwitcher';
 export { default as FilterPanel } from './FilterPanel';
 export { default as QuickFilters } from './QuickFilters';
 export { default as FavoritesSection } from './FavoritesSection';
+export { default as QuickActionsMenu } from './QuickActionsMenu';
+export { default as ProductComparisonModal } from './ProductComparisonModal';

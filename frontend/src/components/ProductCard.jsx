@@ -29,7 +29,15 @@ const PriceChangeIndicator = ({ oldPrice, newPrice }) => {
   );
 };
 
-const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: isFav }) => {
+const ProductCard = ({
+  product,
+  store,
+  toggleFavorite: toggleFav,
+  isFavorite: isFav,
+  isSelected = false,
+  onSelectionChange,
+  showSelection = false
+}) => {
   const storeInfo = STORES.find((s) => s.id === store);
   // Use provided functions or fallback to hook
   const { toggleFavorite: hookToggle, isFavorite: hookIsFav } = useFavorites();
@@ -57,7 +65,21 @@ const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: is
     e.target.src = "https://via.placeholder.com/320x240?text=No+Image";
   };
 
-  const handleProductClick = () => {
+  const handleSelectionChange = () => {
+    if (onSelectionChange) {
+      onSelectionChange(product, store, !isSelected);
+    }
+  };
+
+  const handleCardClick = (e) => {
+    // If selection mode is active, toggle selection instead of opening product
+    if (showSelection) {
+      e.stopPropagation();
+      handleSelectionChange();
+      return;
+    }
+
+    // Otherwise, handle normal product click
     if (link) {
       window.open(link, "_blank", "noopener,noreferrer");
       showProductToast("view", title || "პროდუქტი");
@@ -81,7 +103,12 @@ const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: is
   };
 
   return (
-    <article className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.01] transition-all duration-300 ease-out">
+    <article
+      className={`group bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.01] transition-all duration-300 ease-out cursor-pointer ${
+        isSelected ? 'ring-2 ring-blue-500 border-blue-500' : 'border-gray-100'
+      }`}
+      onClick={handleCardClick}
+    >
       <div className="relative overflow-hidden">
         {image ? (
           <img
@@ -96,8 +123,20 @@ const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: is
           </div>
         )}
 
+        {/* Selection Checkbox */}
+        {showSelection && (
+          <div className="absolute top-3 left-3 z-10">
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={handleSelectionChange}
+              className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            />
+          </div>
+        )}
+
         {/* Store badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md border border-gray-100">
+        <div className={`absolute top-3 ${showSelection ? 'left-12' : 'left-3'} flex items-center gap-2 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md border border-gray-100`}>
           <span
             className={`inline-block h-2.5 w-2.5 rounded-full ${storeInfo?.color}`}
           ></span>
@@ -164,7 +203,15 @@ const ProductCard = ({ product, store, toggleFavorite: toggleFav, isFavorite: is
 
         <div className="flex items-center gap-2">
           <button
-            onClick={handleProductClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (link) {
+                window.open(link, "_blank", "noopener,noreferrer");
+                showProductToast("view", title || "პროდუქტი");
+              } else {
+                showErrorToast("ლინკი მიუწვდომელია");
+              }
+            }}
             disabled={!link}
             className={`flex-1 px-4 py-2.5 rounded-lg border text-xs font-medium transition-all duration-200 ${
               link

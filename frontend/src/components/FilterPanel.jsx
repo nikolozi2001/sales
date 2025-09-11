@@ -17,6 +17,8 @@ const FilterPanel = ({
   priceStats,
   totalProducts,
   onRefresh,
+  showSelection = false,
+  onToggleSelection,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -135,6 +137,19 @@ const FilterPanel = ({
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => onToggleSelection && onToggleSelection()}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2 ${
+              showSelection
+                ? "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {showSelection ? "გათიშვა" : "არჩევა"}
+          </button>
           <button
             onClick={onRefresh}
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"

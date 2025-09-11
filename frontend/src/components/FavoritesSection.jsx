@@ -11,6 +11,9 @@ const FavoritesSection = ({
   loading,
   toggleFavorite,
   isFavorite,
+  showSelection = false,
+  selectedProducts = [],
+  onSelectionChange,
 }) => {
   if (loading) {
     return (
@@ -82,15 +85,31 @@ const FavoritesSection = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {favorites.map((favorite) => (
-          <ProductCard
-            key={favorite.key}
-            product={favorite}
-            store={favorite.store}
-            toggleFavorite={toggleFavorite}
-            isFavorite={isFavorite}
-          />
-        ))}
+        {favorites.map((favorite) => {
+          const isSelected = selectedProducts.some(
+            selected => {
+              // For favorites, compare by store and unique identifier
+              if (favorite.store === "2nabiji") {
+                return selected.store === favorite.store && selected.product.title === favorite.title;
+              } else {
+                return selected.store === favorite.store && (selected.product.link === favorite.link || selected.product.name === favorite.name);
+              }
+            }
+          );
+
+          return (
+            <ProductCard
+              key={favorite.key}
+              product={favorite}
+              store={favorite.store}
+              toggleFavorite={toggleFavorite}
+              isFavorite={isFavorite}
+              showSelection={showSelection}
+              isSelected={isSelected}
+              onSelectionChange={onSelectionChange}
+            />
+          );
+        })}
       </div>
     </section>
   );

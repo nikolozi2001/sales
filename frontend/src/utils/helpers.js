@@ -27,7 +27,13 @@ export const calculateDiscountPercentage = (oldPrice, newPrice) => {
  */
 export const formatPrice = (price) => {
   if (!price || price <= 0) return '';
-  return `${price.toFixed(2)}₾`;
+
+  // Ensure price is a number
+  const numericPrice = typeof price === 'string' ? parseFloat(price) : Number(price);
+
+  if (isNaN(numericPrice) || numericPrice <= 0) return '';
+
+  return `${numericPrice.toFixed(2)}₾`;
 };
 
 /**

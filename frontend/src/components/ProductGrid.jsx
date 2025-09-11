@@ -43,6 +43,9 @@ const ProductGrid = ({
   isFiltering,
   toggleFavorite,
   isFavorite,
+  showSelection = false,
+  selectedProducts = [],
+  onSelectionChange,
 }) => {
   if (loading) {
     return (
@@ -105,15 +108,31 @@ const ProductGrid = ({
       )}
       {/* Product Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {products.map((item, index) => (
-          <ProductCard
-            key={`${item.store}-${item.product.id || index}`}
-            product={item.product}
-            store={item.store}
-            toggleFavorite={toggleFavorite}
-            isFavorite={isFavorite}
-          />
-        ))}
+        {products.map((item, index) => {
+          const isSelected = selectedProducts.some(
+            selected => {
+              // For regular products, compare by store and a unique identifier
+              if (item.store === "2nabiji") {
+                return selected.store === item.store && selected.product.title === item.product.title;
+              } else {
+                return selected.store === item.store && (selected.product.link === item.product.link || selected.product.name === item.product.name);
+              }
+            }
+          );
+
+          return (
+            <ProductCard
+              key={`${item.store}-${item.product.id || index}`}
+              product={item.product}
+              store={item.store}
+              toggleFavorite={toggleFavorite}
+              isFavorite={isFavorite}
+              showSelection={showSelection}
+              isSelected={isSelected}
+              onSelectionChange={onSelectionChange}
+            />
+          );
+        })}
       </div>
 
       {/* Pagination Controls */}
